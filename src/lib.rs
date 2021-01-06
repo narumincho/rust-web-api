@@ -1,19 +1,38 @@
-use wasm_bindgen::prelude::*;
+use wasm_bindgen;
+use web_sys::Document;
+use web_sys::Node;
 
-// Called by our JS entry point to run the example
-#[wasm_bindgen(start)]
-pub fn run() -> Result<(), JsValue> {
-    // Use `web_sys`'s global `window` function to get a handle on the global
-    // window object.
-    let window = web_sys::window().expect("no global `window` exists");
-    let document = window.document().expect("should have a document on window");
-    let body = document.body().expect("document should have a body");
+#[wasm_bindgen::prelude::wasm_bindgen(start)]
+#[allow(unused_must_use)]
+pub fn run() {
+    let document_maybe = get_document();
+    match document_maybe {
+        Some(document) => {
+            Document::set_title(&document, "やああ");
+            match Document::create_element(&document, "div") {
+                Ok(div) => {
+                    Node::set_text_content(&div, Some("それな"));
+                    match Document::body(&document) {
+                        Some(body) => {
+                            Node::append_child(&body, &div);
+                            ()
+                        }
+                        None => {}
+                    }
+                }
+                Err(_) => {}
+            }
+        }
+        None => {}
+    }
+}
 
-    // Manufacture the element we're gonna append
-    let val = document.create_element("p")?;
-    val.set_inner_html("Hello from Rust!");
-
-    body.append_child(&val)?;
-
-    Ok(())
+fn get_document() -> Option<Document> {
+    match web_sys::window() {
+        Some(window) => match web_sys::Window::document(&window) {
+            Some(document) => Some(document),
+            None => None,
+        },
+        None => None,
+    }
 }
