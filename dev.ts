@@ -1,11 +1,9 @@
-// @ts-check
-
 /**
  * 開発用 ビルド & サーバー
  */
-const fastify = require("fastify").default;
-const fileSystem = require("fs").promises;
-const childProcess = require("child_process");
+import fastify from "fastify";
+import { promises as fileSystem } from "fs";
+import * as childProcess from "child_process";
 
 const programJsPath = "dist/programJs";
 const programWasmPath = "dist/programWasm";
@@ -62,3 +60,5 @@ childProcess.exec(
     console.log("http://localhost:8080");
   }
 );
+
+export {};
