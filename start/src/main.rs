@@ -1,10 +1,10 @@
-use rand::prelude::*;
+use rand::prelude::Rng;
 
 #[tokio::main]
 async fn main() {
-    let mut rng = rand::thread_rng();
+    let mut rng: rand::prelude::ThreadRng = rand::thread_rng();
     let random_value: u8 = rng.gen();
-    let random_value_as_text: String = random_value.to_string();
+    let random_value_as_string: String = random_value.to_string();
 
     // We'll bind to 127.0.0.1:3000
     let addr = std::net::SocketAddr::from(([127, 0, 0, 1], 3000));
@@ -14,7 +14,7 @@ async fn main() {
     let make_svc = hyper::service::make_service_fn(|_conn| async {
         // service_fn converts our function into a `Service`
         Ok::<_, std::convert::Infallible>(hyper::service::service_fn(|_request| {
-            hello_world(_request, "やあ".to_string())
+            hello_world(_request, "sample text".to_string())
         }))
     });
 
