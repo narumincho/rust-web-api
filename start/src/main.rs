@@ -14,7 +14,7 @@ async fn main() {
     let make_svc = hyper::service::make_service_fn(|_conn| async {
         // service_fn converts our function into a `Service`
         Ok::<_, std::convert::Infallible>(hyper::service::service_fn(|_request| {
-            hello_world(_request, "sample text".to_string())
+            hello_world(_request, random_value_as_string)
         }))
     });
 
